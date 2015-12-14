@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="en" ng-app="myApp">
+<head>
+<title>GitHub APU Demo - List Repositories</title>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css">
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
+<script src="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js"></script>
+<script src="http://ajax.googleapis.com/ajax/libs/angularjs/1.4.8/angular.min.js"></script>
+
+    <script src="//ajax.googleapis.com/ajax/libs/angularjs/1.4.7/angular-animate.js"></script>
+    <script src="//angular-ui.github.io/bootstrap/ui-bootstrap-tpls-0.14.3.js"></script>
+    
+<script src="github-repository.js"></script>
+<link rel="stylesheet" href="app.css">
+<link rel="stylesheet" href="octicons/octicons.css">
+</head>
+<body ng-controller="MyController" >
+
+<nav class="navbar">
+  <div class="container-fluid">
+    <div class="navbar-header"> GitHub API Demo</div>
+  </div>
+</nav>
+
+<div class="container" >
+<div class="panel panel-default">
+
+  <div class="panel-heading" align="center">
+    <h2>Get repositories for users/organisations</h2>
+     <form id="myForm" class="form-inline" role="form">
+          <input type="text" class="form-control" id="txtSearch" placeholder="Search ..." ng-model="searchText" >
+              <select class="form-control" id="selTypes" ng-model="userTypes" >
+                <option value="users"> in usernames</option>
+                <option value="orgs"> in organisations</option>
+              </select>
+			<input type="submit" class="btn btn-primary" ng-click="showPanel()" value="Get Repositories" >
+     </form>  
+
+     
+  </div>
+  
+  <div class="panel-body" ng-show="showResults"  >
+  <div align="center">
+  
+     <div class="user_panel" >
+      <span class="label label-default">{{userData.login}}</span>
+      <div class="user-name">{{userData.name}}</div>
+      <div class="user-location">{{userData.location}}</div>
+      <div>Repositories: <span class="label label-success">{{userData.public_repos}}</span></div>
+     </div>
+  
+	 <div class="pagination">
+        <div>Showing Page: {{bigCurrentPage}} of {{totalPages()}} ({{totalItems}} records)</div>
+       <uib-pagination total-items="bigTotalItems" items-per-page="totalPerPage" ng-model="bigCurrentPage" max-size="maxSize" ng-change="getResults()" class="pagination-sm" boundary-links="true"></uib-pagination>
+     </div>
+
+  </div>
+    <table class="table table-striped table-hover table-responsive">
+ <thead>
+    <tr>
+      <th >&nbsp;</th>
+      <th ><form class="form-inline"><button type="button" class="btn btn-default" ng-model="FullNameDir" ng-click="SortByThis('full_name')" ng-disabled="IsOrg" >Full Name <span class="glyphicon glyphicon-sort"></span></button> 
+           <input type="text" placeholder="type filter here"  class="form-control" ng-model="searchRepo"></form></th>
+      <th ><button type="button" class="btn btn-default" ng-model="CreatedAtDirDir" ng-click="SortByThis('created')" ng-disabled="IsOrg" >Created At <span class="glyphicon glyphicon-sort"></span></button></th>
+      <th ><button type="button" class="btn btn-default" ng-model="UpdatedAtDir" ng-click="SortByThis('updated')" ng-disabled="IsOrg" >Updated At <span class="glyphicon glyphicon-sort"></span></button></th>
+      <th ><button type="button" class="btn btn-default" ng-model="PushedAtDir" ng-click="SortByThis('pushed')" ng-disabled="IsOrg" >Pushed At <span class="glyphicon glyphicon-sort"></span></button></th>
+    </tr>
+    </thead>
+ <tbody>
+    <tr ng-repeat="repo in repoData | filter:searchRepo">
+      <td align="center">
+        <span ng-if="repo.fork" class="octicon octicon-repo-forked"></span>
+        <span ng-if="!repo.fork" class="octicon octicon-repo"></span>        
+       </td>    
+      <td><a href="{{repo.html_url}}" target="_blank" > {{repo.full_name}}</a> <small>{{repo.description}}</small></td>
+      <td align="center"><small>{{repo.created_at| date : short : timezone}}</small></td>
+      <td align="center"><small>{{repo.updated_at | date : short : timezone}}</small></td>
+      <td align="center"><small>{{repo.pushed_at | date : short : timezone}}</small></td>
+    </tr>
+  </tbody>
+</table>
+</div>
+     <div ng-show="NoDataFound">
+			oops, either no user or repositories found!
+     </div>
+</div>
+
+</div>
+
+</body>
+</html>
