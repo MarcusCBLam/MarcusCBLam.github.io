@@ -1,4 +1,4 @@
-# github-api-repositories
+# Accessing Github API repositories
 
 <b>Using AngularJS for accessing Github repositories.</b>
 
@@ -14,6 +14,8 @@ Here you can:
 
 3. Filter - you can filter the name and descripion of the repositories. As you can't search repositories server-side, this is done client-side on the page. You can use the pagination components to scroll through the filtered results. 
 
+# Demo 
+View the app: <a href="http://marcuscblam.github.io/">marcuscblam.github.io/</a>
 
 # To Do's
 
